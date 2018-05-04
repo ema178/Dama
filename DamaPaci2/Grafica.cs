@@ -149,7 +149,7 @@ namespace DamaPaci2
                     directionY = -1;
                     maxY = 0;
                 }
-
+                routes[0] = cells[cell.riga + 1, cell.colonna + 1];
                 return routes;
             }
         }
