@@ -38,8 +38,8 @@ namespace DamaPaci2
                 {
                     pannello[r, c] = new PanelRC
                     {
-                        colonna = c,
-                        riga = r
+                        posY = c,
+                        posX = r
                     };
                     if ((r + c) % 2 == 0) pannello[r, c].BackColor = Color.DimGray;
                     else pannello[r, c].BackColor = Color.White;
@@ -85,6 +85,11 @@ namespace DamaPaci2
                             temp = new Pedina(ColoriPedine.black, pannello[r, c]);
                             temp.Click += new EventHandler(PercorsiDisponibili);
                         }
+                        /*if(c == 3 && r == 5)
+                        {
+                            temp = new Pedina(ColoriPedine.black, pannello[r, c]);
+                            temp.Click += new EventHandler(PercorsiDisponibili);
+                        }*/
                     }
                 }
         }
@@ -109,8 +114,8 @@ namespace DamaPaci2
         public class PanelRC : Panel  //classe PanelRC
         {
             public Pedina pedina = null;
-            public int colonna;
-            public int riga;
+            public int posY;
+            public int posX;
         }
 
         public class Pedina : PictureBox //classe Pedina
@@ -135,9 +140,6 @@ namespace DamaPaci2
                 PanelRC[,] cells = scacchiera.pannello;
                 PanelRC[] routes = new PanelRC[2];
                 int directionY;
-                int directionX;
-                int maxY;
-                int maxX;
                 int i = 0;
                 ColoriPedine coloreMangiabile;
                 bool possoMangiare = false;
@@ -145,42 +147,47 @@ namespace DamaPaci2
                 if (color == ColoriPedine.red)
                 {
                     directionY = 1;
-                    maxY = 7;
                     coloreMangiabile = ColoriPedine.black;
                 }
                 else
                 {
                     directionY = -1;
-                    maxY = 0;
                     coloreMangiabile = ColoriPedine.red;
                 }
-
-                /* if (cells[cell.riga + (2*directionY), cell.colonna + 2].pedina == null && cells[cell.riga + (1*directionY), cell.colonna + 1].pedina.color == coloreMangiabile)
-                 {
-                     routes[i] = cells[cell.riga + (2 * directionY), cell.colonna + 2];
-                     i++;
-                     possoMangiare = true;
-                 }
-                 if (cells[cell.riga + (2 * directionY), cell.colonna - 2].pedina == null && cells[cell.riga + (1*directionY), cell.colonna - 1].pedina.color == coloreMangiabile)  // eatable left
-                 {
-                     routes[i] = cells[cell.riga + (2*directionY), cell.colonna - 2];
-                     i++;
-                     possoMangiare = true;
-                 }*/
-                if (cell.riga + 1 <= 7)
+                if (cell.posX + 2 <= 7)  //eatble right
                 {
-                    if (!possoMangiare && cells[cell.riga + 1, cell.colonna + (1 * directionY)].pedina == null)           //movable right
+
+                    if (cells[cell.posX + 2, cell.posY + (2 * directionY)].pedina == null && cells[cell.posX + 1, cell.posY + (1 * directionY)].pedina != null && cells[cell.posX + 1, cell.posY + (1 * directionY)].pedina.color == coloreMangiabile)
                     {
-                        routes[i] = cells[cell.riga + 1, cell.colonna + (1 * directionY)];
+                        routes[i] = cells[cell.posX + 2, cell.posY + (2 * directionY)];
+                        i++;
+                        possoMangiare = true;
+                    }
+                }
+                if (cell.posX - 2 >= 0)  //eatble left
+                {
+                    if (cells[cell.posX - 2, cell.posY + (2 * directionY)].pedina == null && cells[cell.posX - 1, cell.posY + (1 * directionY)].pedina !=null && cells[cell.posX - 1, cell.posY + (1 * directionY)].pedina.color == coloreMangiabile)  // eatable left
+                    {
+                        routes[i] = cells[cell.posX - 2, cell.posY + (2 * directionY)];
+                        i++;
+                        possoMangiare = true;
+                    }
+                }
+
+                if (cell.posX + 1 <= 7) //movable right
+                {
+                    if (!possoMangiare && cells[cell.posX + 1, cell.posY + (1 * directionY)].pedina == null)           
+                    {
+                        routes[i] = cells[cell.posX + 1, cell.posY + (1 * directionY)];
                         i++;
                     }
                 }
-                if (cell.riga - 1 >= 0)
-                    if (cell.riga - 1 >= 0 && cell.colonna + (1 * directionY) >= 0)   //movable left
-                        if (cells[cell.riga - 1, cell.colonna + (1 * directionY)].pedina == null)
+                if (cell.posX - 1 >= 0)   //movable left
+                    if (cell.posX - 1 >= 0 && cell.posY + (1 * directionY) >= 0)   
+                        if (cells[cell.posX - 1, cell.posY + (1 * directionY)].pedina == null)
                             if (!possoMangiare)
                     {
-                        routes[i] = cells[cell.riga - 1, cell.colonna + (1 * directionY)];
+                        routes[i] = cells[cell.posX - 1, cell.posY + (1 * directionY)];
                         i++;
                     }
                 

@@ -33,7 +33,7 @@ namespace DamaPaci2
             PanelRC temp = source;
 
             int directionY;
-            if (source.colonna > destination.colonna)
+            if (source.posY > destination.posY)
             {
                 directionY = -1;
             }
@@ -43,7 +43,7 @@ namespace DamaPaci2
             }
 
             int directionX;
-            if (source.riga > destination.riga)
+            if (source.posX > destination.posX)
             {
                 directionX = -1;
             }
@@ -60,7 +60,7 @@ namespace DamaPaci2
 
                     do
                     {
-                        temp = pannello[temp.riga + directionX, temp.colonna + directionY];
+                        temp = pannello[temp.posX + directionX, temp.posY + directionY];
                         if (temp.pedina != null)
                         {
                             Pedina occupier = temp.pedina;
@@ -83,7 +83,7 @@ namespace DamaPaci2
                     switch (destination.pedina.color)
                     {
                         case ColoriPedine.red:
-                            if (destination.colonna == 7)
+                            if (destination.posY == 7)
                             {
                                 Pedina occupier = destination.pedina;
                                 destination.Controls.Remove(occupier);
@@ -93,7 +93,7 @@ namespace DamaPaci2
                             break;
 
                         case ColoriPedine.black:
-                            if (destination.colonna == 0)
+                            if (destination.posY == 0)
                             {
                                 Pedina occupier = destination.pedina;
                                 destination.Controls.Remove(occupier);
