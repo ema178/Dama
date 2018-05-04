@@ -22,7 +22,7 @@ namespace DamaPaci2
         public Image black = Image.FromFile(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal) + @"..\..\Desktop\Dama\Resources\black60p.png");
         public Image redKing = Image.FromFile(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal) + @"..\..\Desktop\Dama\Resources\red60p_king.png");
         public Image blackKing = Image.FromFile(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal) + @"..\..\Desktop\Dama\Resources\black60p_king.png");
-        public enum Pedine { red, black };
+        public enum ColoriPedine { red, black };
 
         protected PanelRC[,] pannello = new PanelRC[8, 8];
         protected Pedina pedina = null;
@@ -38,8 +38,8 @@ namespace DamaPaci2
                 {
                     pannello[r, c] = new PanelRC
                     {
-                        riga = c,
-                        colonna = r
+                        colonna = c,
+                        riga = r
                     };
                     if ((r + c) % 2 == 0) pannello[r, c].BackColor = Color.DimGray;
                     else pannello[r, c].BackColor = Color.White;
@@ -77,12 +77,12 @@ namespace DamaPaci2
                         Pedina temp;
                         if (c < 3)
                         {
-                            temp = new Pedina(Pedine.red, pannello[r, c]);
+                            temp = new Pedina(ColoriPedine.red, pannello[r, c]);
                             temp.Click += new EventHandler(PercorsiDisponibili);
                         }
                         else if (c > 4)
                         {
-                            temp = new Pedina(Pedine.black, pannello[r, c]);
+                            temp = new Pedina(ColoriPedine.black, pannello[r, c]);
                             temp.Click += new EventHandler(PercorsiDisponibili);
                         }
                     }
@@ -109,17 +109,17 @@ namespace DamaPaci2
         public class PanelRC : Panel  //classe PanelRC
         {
             public Pedina pedina = null;
-            public int riga;
             public int colonna;
+            public int riga;
         }
 
         public class Pedina : PictureBox //classe Pedina
         {
-            public Pedine color;
-            public Pedina(Pedine colore, PanelRC cell) //costruttore Pedina
+            public ColoriPedine color;
+            public Pedina(ColoriPedine colore, PanelRC cell) //costruttore Pedina
             {
                 color = colore;
-                if (colore == Pedine.red) Image = Image.FromFile(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal) + @"..\..\Desktop\Dama\Resources\red60p.png");
+                if (colore == ColoriPedine.red) Image = Image.FromFile(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal) + @"..\..\Desktop\Dama\Resources\red60p.png");
                 else Image = Image.FromFile(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal) + @"..\..\Desktop\Dama\Resources\black60p.png");
                 SizeMode = PictureBoxSizeMode.StretchImage;
                 cell.Controls.Add(this);
@@ -138,27 +138,61 @@ namespace DamaPaci2
                 int directionX;
                 int maxY;
                 int maxX;
-                if ((color == Pedine.red && !scacchiera.turnoRossi) || (color == Pedine.black && scacchiera.turnoRossi)) return null;
-                if (color == Pedine.red)
+                int i = 0;
+                ColoriPedine coloreMangiabile;
+                bool possoMangiare = false;
+                if ((color == ColoriPedine.red && !scacchiera.turnoRossi) || (color == ColoriPedine.black && scacchiera.turnoRossi)) return null;
+                if (color == ColoriPedine.red)
                 {
                     directionY = 1;
                     maxY = 7;
+                    coloreMangiabile = ColoriPedine.black;
                 }
                 else
                 {
                     directionY = -1;
                     maxY = 0;
+                    coloreMangiabile = ColoriPedine.red;
                 }
-                routes[0] = cells[cell.riga + 1, cell.colonna + 1];
+
+                /* if (cells[cell.riga + (2*directionY), cell.colonna + 2].pedina == null && cells[cell.riga + (1*directionY), cell.colonna + 1].pedina.color == coloreMangiabile)
+                 {
+                     routes[i] = cells[cell.riga + (2 * directionY), cell.colonna + 2];
+                     i++;
+                     possoMangiare = true;
+                 }
+                 if (cells[cell.riga + (2 * directionY), cell.colonna - 2].pedina == null && cells[cell.riga + (1*directionY), cell.colonna - 1].pedina.color == coloreMangiabile)  // eatable left
+                 {
+                     routes[i] = cells[cell.riga + (2*directionY), cell.colonna - 2];
+                     i++;
+                     possoMangiare = true;
+                 }*/
+                if (cell.riga + 1 <= 7)
+                {
+                    if (!possoMangiare && cells[cell.riga + 1, cell.colonna + (1 * directionY)].pedina == null)           //movable right
+                    {
+                        routes[i] = cells[cell.riga + 1, cell.colonna + (1 * directionY)];
+                        i++;
+                    }
+                }
+                if (cell.riga - 1 >= 0)
+                    if (cell.riga - 1 >= 0 && cell.colonna + (1 * directionY) >= 0)   //movable left
+                        if (cells[cell.riga - 1, cell.colonna + (1 * directionY)].pedina == null)
+                            if (!possoMangiare)
+                    {
+                        routes[i] = cells[cell.riga - 1, cell.colonna + (1 * directionY)];
+                        i++;
+                    }
+                
                 return routes;
             }
         }
 
         public class King : Pedina
         {
-            public King(Pedine colore, PanelRC cell) : base(colore, cell)  //costruttore King
+            public King(ColoriPedine colore, PanelRC cell) : base(colore, cell)  //costruttore King
             {
-                if (colore == Pedine.red) Image = Image.FromFile(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal) + @"..\..\Desktop\Dama\Resources\red60p_king.png");
+                if (colore == ColoriPedine.red) Image = Image.FromFile(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal) + @"..\..\Desktop\Dama\Resources\red60p_king.png");
                 else Image = Image.FromFile(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal) + @"..\..\Desktop\Dama\Resources\black60p_king.png");
                 SizeMode = PictureBoxSizeMode.StretchImage;
                 cell.Controls.Add(this);
@@ -187,5 +221,9 @@ namespace DamaPaci2
             }
         }
 
+        private void Stato_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

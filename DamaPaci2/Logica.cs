@@ -25,7 +25,7 @@ namespace DamaPaci2
         {
             if (pedina == null)
                 return;
-            if ((pedina.color == Pedine.red && !turnoRossi) || (pedina.color == Pedine.black && turnoRossi)) return;
+            if ((pedina.color == ColoriPedine.red && !turnoRossi) || (pedina.color == ColoriPedine.black && turnoRossi)) return;
 
             PanelRC destination = sender as PanelRC;
             PanelRC source = pedina.Parent as PanelRC;
@@ -33,7 +33,7 @@ namespace DamaPaci2
             PanelRC temp = source;
 
             int directionY;
-            if (source.riga > destination.riga)
+            if (source.colonna > destination.colonna)
             {
                 directionY = -1;
             }
@@ -43,7 +43,7 @@ namespace DamaPaci2
             }
 
             int directionX;
-            if (source.colonna > destination.colonna)
+            if (source.riga > destination.riga)
             {
                 directionX = -1;
             }
@@ -60,7 +60,7 @@ namespace DamaPaci2
 
                     do
                     {
-                        temp = pannello[temp.colonna + directionX, temp.riga + directionY];
+                        temp = pannello[temp.riga + directionX, temp.colonna + directionY];
                         if (temp.pedina != null)
                         {
                             Pedina occupier = temp.pedina;
@@ -82,23 +82,23 @@ namespace DamaPaci2
 
                     switch (destination.pedina.color)
                     {
-                        case Pedine.red:
-                            if (destination.riga == 7)
+                        case ColoriPedine.red:
+                            if (destination.colonna == 7)
                             {
                                 Pedina occupier = destination.pedina;
                                 destination.Controls.Remove(occupier);
                                 occupier.Dispose();
-                                new King(Pedine.red, destination);
+                                new King(ColoriPedine.red, destination);
                             }
                             break;
 
-                        case Pedine.black:
-                            if (destination.riga == 0)
+                        case ColoriPedine.black:
+                            if (destination.colonna == 0)
                             {
                                 Pedina occupier = destination.pedina;
                                 destination.Controls.Remove(occupier);
                                 occupier.Dispose();
-                                new King(Pedine.black, destination);
+                                new King(ColoriPedine.black, destination);
                             }
                             break;
                     }

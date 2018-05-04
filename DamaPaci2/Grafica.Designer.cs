@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.back = new System.Windows.Forms.Panel();
+            this.Stato = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // back
@@ -42,21 +43,34 @@
             this.back.TabIndex = 0;
             this.back.Resize += new System.EventHandler(this.ResizeScacchiera);
             // 
+            // Stato
+            // 
+            this.Stato.AutoSize = true;
+            this.Stato.Location = new System.Drawing.Point(673, 120);
+            this.Stato.Name = "Stato";
+            this.Stato.Size = new System.Drawing.Size(35, 13);
+            this.Stato.TabIndex = 1;
+            this.Stato.Text = "label1";
+            this.Stato.Click += new System.EventHandler(this.Stato_Click);
+            // 
             // Grafica
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.Stato);
             this.Controls.Add(this.back);
             this.Name = "Grafica";
             this.Text = "Form1";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
         private System.Windows.Forms.Panel back;
+        public System.Windows.Forms.Label Stato;
     }
 }
 
