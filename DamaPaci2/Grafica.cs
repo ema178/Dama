@@ -89,6 +89,7 @@ namespace DamaPaci2
                         {
                             temp = new Pedina(ColoriPedine.black, pannello[r, c]);
                             temp.Click += new EventHandler(PercorsiDisponibili);
+                            ciao2
                         }*/
                     }
                 }
