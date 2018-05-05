@@ -93,6 +93,7 @@ namespace DamaPaci2
                         {
                             temp = new Damone(ColoriPedine.black, pannello[r, c]);
                             temp.Click += new EventHandler(PercorsiDisponibili);
+                            ciao
                         }*/
 
                     }
