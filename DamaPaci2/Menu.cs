@@ -19,8 +19,31 @@ namespace DamaPaci2
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var f = new Grafica();
-            f.ShowDialog();
+            
+        }
+
+        private void Play_Click(object sender, EventArgs e)
+        {
+            if(OnePlayer.Checked == true)
+            {
+                var f = new LogicaAI();
+                f.ShowDialog();
+            }
+            else if(TwoPlayers.Checked == true)
+            {
+                var f = new Logica();
+                f.ShowDialog();
+            }
+        }
+
+        private void TwoPlayers_CheckedChanged(object sender, EventArgs e)
+        {
+            OnePlayer.Checked = !TwoPlayers.Checked;
+        }
+
+        private void OnePlayer_CheckedChanged(object sender, EventArgs e)
+        {
+            TwoPlayers.Checked = !OnePlayer.Checked;
         }
     }
 }

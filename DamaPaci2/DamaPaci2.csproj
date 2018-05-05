@@ -57,6 +57,12 @@
     <Compile Include="Logica.Designer.cs">
       <DependentUpon>Logica.cs</DependentUpon>
     </Compile>
+    <Compile Include="LogicaAI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LogicaAI.Designer.cs">
+      <DependentUpon>LogicaAI.cs</DependentUpon>
+    </Compile>
     <Compile Include="Menu.cs">
       <SubType>Form</SubType>
     </Compile>
