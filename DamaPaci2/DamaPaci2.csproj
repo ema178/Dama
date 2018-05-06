@@ -51,11 +51,11 @@
     <Compile Include="Grafica.Designer.cs">
       <DependentUpon>Grafica.cs</DependentUpon>
     </Compile>
-    <Compile Include="Istruzioni.cs">
+    <Compile Include="Regole.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Istruzioni.Designer.cs">
-      <DependentUpon>Istruzioni.cs</DependentUpon>
+    <Compile Include="Regole.Designer.cs">
+      <DependentUpon>Regole.cs</DependentUpon>
     </Compile>
     <Compile Include="Logica.cs">
       <SubType>Form</SubType>
@@ -80,8 +80,8 @@
     <EmbeddedResource Include="Grafica.resx">
       <DependentUpon>Grafica.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Istruzioni.resx">
-      <DependentUpon>Istruzioni.cs</DependentUpon>
+    <EmbeddedResource Include="Regole.resx">
+      <DependentUpon>Regole.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu.resx">
       <DependentUpon>Menu.cs</DependentUpon>

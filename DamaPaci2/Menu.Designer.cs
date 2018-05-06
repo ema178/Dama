@@ -50,10 +50,10 @@
             this.Play.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("Play.BackgroundImage")));
             this.Play.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.Play.ForeColor = System.Drawing.Color.Black;
-            this.Play.Location = new System.Drawing.Point(146, 349);
+            this.Play.Location = new System.Drawing.Point(145, 348);
             this.Play.Margin = new System.Windows.Forms.Padding(2);
             this.Play.Name = "Play";
-            this.Play.Size = new System.Drawing.Size(87, 93);
+            this.Play.Size = new System.Drawing.Size(89, 93);
             this.Play.TabIndex = 1;
             this.Play.UseVisualStyleBackColor = true;
             this.Play.Click += new System.EventHandler(this.Play_Click);
@@ -76,7 +76,6 @@
             // 
             // OnePlayer
             // 
-            this.OnePlayer.AutoCheck = false;
             this.OnePlayer.AutoSize = true;
             this.OnePlayer.BackColor = System.Drawing.Color.Transparent;
             this.OnePlayer.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

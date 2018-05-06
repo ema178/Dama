@@ -20,4 +20,4 @@ C:\Users\ema_1\Desktop\Dama Git\Dama\DamaPaci2\obj\Debug\DamaPaci2.csproj.Genera
 C:\Users\ema_1\Desktop\Dama Git\Dama\DamaPaci2\obj\Debug\DamaPaci2.csproj.CoreCompileInputs.cache
 C:\Users\ema_1\Desktop\Dama Git\Dama\DamaPaci2\obj\Debug\DamaPaci2.exe
 C:\Users\ema_1\Desktop\Dama Git\Dama\DamaPaci2\obj\Debug\DamaPaci2.pdb
-C:\Users\ema_1\Desktop\Dama Git\Dama\DamaPaci2\obj\Debug\DamaPaci2.Istruzioni.resources
+C:\Users\ema_1\Desktop\Dama Git\Dama\DamaPaci2\obj\Debug\DamaPaci2.Regole.resources

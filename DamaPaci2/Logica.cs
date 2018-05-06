@@ -15,9 +15,9 @@ namespace DamaPaci2
         public Logica()
         {
             InitializeComponent();
-            for (var r = 0; r < righe; r++)
-                for (var c = 0; c < colonne; c++)
-                    pannello[r, c].Click += new EventHandler(MoveTo);
+            for (int r = 0; r < righe; r++)
+                for (int c = 0; c < colonne; c++)
+                    if ((r + c) % 2 == 0) pannello[r, c].Click += new EventHandler(MoveTo);
         }
 
         protected void MoveTo(object sender, EventArgs e)
@@ -30,7 +30,7 @@ namespace DamaPaci2
             PanelRC corrente = pedina.Parent as PanelRC;
             PanelRC temp = corrente;
             int dirY, dirX;
-            
+   
             for (int j = 0; j < 2; j++) //cicla sui due array
             {
                 if (corrente.posY > destinazione.posY) dirY = -1;
@@ -61,9 +61,7 @@ namespace DamaPaci2
 
                         destinazione.pedina = pedina;
                         destinazione.Controls.Add(pedina);
-                        corrente.pedina = null;
-                        pedina = null;
-
+ 
                         switch (destinazione.pedina.color)
                         {
                             case ColoriPedine.red:
@@ -92,7 +90,25 @@ namespace DamaPaci2
                         }
                         if (turno == Turni.red) turno = Turni.black;
                         else turno = Turni.red;
+                        for (int y = 0; y < righe; y++)
+                            for (int x = 0; x < colonne; x++)
+                            {
+                                if ((y + x) % 2 == 0)
+                                {
+                                    if(pannello[y, x].pedina != null)
+                                    {
+                                        pedina = pannello[y, x].pedina;
+                                        Array.Clear(pedina.percorsiMove, 0, 4);
+                                        Array.Clear(pedina.percorsiEat, 0, 4);
+                                    }
+                                }
+                            }
+                        
                         Suggerimenti.Text = "Turno dei " + turno;
+                        corrente.pedina = null;
+                        pedina = null;
+                        devoMangiare = false;
+
                     }
 
                 }
