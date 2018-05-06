@@ -28,9 +28,7 @@ namespace DamaPaci2
             PanelRC corrente = pedina.Parent as PanelRC;
             PanelRC[] percorsi = pedina.GeneraPercorsi(this);
             PanelRC temp = corrente;
-
-            int dirY;
-            int dirX;
+            int dirY, dirX;
             if (corrente.posY > destinazione.posY) dirY = -1;
             else dirY = 1;
             if (corrente.posX > destinazione.posX) dirX = -1;
@@ -90,11 +88,10 @@ namespace DamaPaci2
                     }
                     if (turno == Turni.red) turno = Turni.black;
                     else turno = Turni.red;
+                    Suggerimenti.Text = "Turno dei " + turno;
                 }
 
             }
         }
-
-
     }
 }

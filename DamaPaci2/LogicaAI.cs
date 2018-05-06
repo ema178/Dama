@@ -22,16 +22,13 @@ namespace DamaPaci2
 
         protected void MoveTo(object sender, EventArgs e)
         {
-            if (pedina == null)
-                return;
+            if (pedina == null) return;
             if ((pedina.color == ColoriPedine.red && turno == Turni.black) || (pedina.color == ColoriPedine.black && turno == Turni.red)) return;
             PanelRC destinazione = sender as PanelRC;
             PanelRC corrente = pedina.Parent as PanelRC;
             PanelRC[] percorsi = pedina.GeneraPercorsi(this);
             PanelRC temp = corrente;
-
-            int dirY;
-            int dirX;
+            int dirY, dirX;
             if (corrente.posY > destinazione.posY) dirY = -1;
             else dirY = 1;
             if (corrente.posX > destinazione.posX) dirX = -1;
@@ -46,7 +43,6 @@ namespace DamaPaci2
                         temp = pannello[temp.posX + dirX, temp.posY + dirY];
                         if (temp.pedina != null)
                         {
-                            System.Threading.Thread.Sleep(1000);
                             Pedina curr = temp.pedina;
                             temp.Controls.Remove(curr);
                             temp.pedina = null;
@@ -72,7 +68,9 @@ namespace DamaPaci2
                                 Pedina curr = destinazione.pedina;
                                 destinazione.Controls.Remove(curr);
                                 curr.Dispose();
-                                new Damone(ColoriPedine.red, destinazione);
+                                Damone dam;
+                                dam = new Damone(ColoriPedine.red, destinazione);
+                                dam.Click += new EventHandler(PercorsiDisponibili);
                             }
                             break;
 
@@ -82,7 +80,9 @@ namespace DamaPaci2
                                 Pedina curr = destinazione.pedina;
                                 destinazione.Controls.Remove(curr);
                                 curr.Dispose();
-                                new Damone(ColoriPedine.black, destinazione);
+                                Damone dam;
+                                dam = new Damone(ColoriPedine.black, destinazione);
+                                dam.Click += new EventHandler(PercorsiDisponibili);
                             }
                             break;
                     }
@@ -92,7 +92,5 @@ namespace DamaPaci2
 
             }
         }
-
-
     }
 }

@@ -24,12 +24,12 @@ namespace DamaPaci2
 
         private void Play_Click(object sender, EventArgs e)
         {
-            if(OnePlayer.Checked == true)
+            if(OnePlayer.Checked)
             {
                 var f = new LogicaAI();
                 f.ShowDialog();
             }
-            else if(TwoPlayers.Checked == true)
+            else if(TwoPlayers.Checked)
             {
                 var f = new Logica();
                 f.ShowDialog();
@@ -38,12 +38,12 @@ namespace DamaPaci2
 
         private void TwoPlayers_CheckedChanged(object sender, EventArgs e)
         {
-            OnePlayer.Checked = !TwoPlayers.Checked;
+            OnePlayer.Checked = false;
         }
 
         private void OnePlayer_CheckedChanged(object sender, EventArgs e)
         {
-            TwoPlayers.Checked = !OnePlayer.Checked;
+            TwoPlayers.Checked = false;
         }
     }
 }

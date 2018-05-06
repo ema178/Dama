@@ -41,6 +41,7 @@ namespace DamaPaci2
                     else pannello[r, c].BackColor = Color.White;
                     back.Controls.Add(pannello[r, c]);
                 }
+            Suggerimenti.Text = "Benvenuto! Iniziano i " + turno;
             RefreshPedineMancanti();
             ResizeScacchiera(null, null); //resize iniziale
         }
@@ -120,7 +121,11 @@ namespace DamaPaci2
             PanelRC[] percorsi = curr.GeneraPercorsi(this);
             if ((pedina.color == ColoriPedine.red && turno == Turni.black) || (pedina.color == ColoriPedine.black && turno == Turni.red)) return;
             for (int i = 0; i < percorsi.Length; i++)
-                if (percorsi[i] != null) percorsi[i].BackColor = Color.DimGray;
+                if (percorsi[i] != null)
+                {
+                    percorsi[i].BackColor = Color.DimGray;
+                    percorsi[i].mangio = false;
+                }
         }
 
         public class PanelRC : Panel  //classe PanelRC
@@ -138,8 +143,8 @@ namespace DamaPaci2
             public Pedina(ColoriPedine colore, PanelRC cell) //costruttore classe Pedina
             {
                 color = colore;
-                if (colore == ColoriPedine.red) Image = Image.FromFile(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal) + @"..\..\Desktop\Dama\Resources\red60p.png");
-                else Image = Image.FromFile(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal) + @"..\..\Desktop\Dama\Resources\black60p.png");
+                if (colore == ColoriPedine.red) Image = Properties.Resources.red60p;
+                else Image = Properties.Resources.black60p;
                 SizeMode = PictureBoxSizeMode.StretchImage;
                 cell.Controls.Add(this);
                 cell.pedina = this;
@@ -152,8 +157,9 @@ namespace DamaPaci2
             {
                 PanelRC corrente = Parent as PanelRC;
                 PanelRC[,] pannelli = scacchiera.pannello;
-                PanelRC[] percorsi = new PanelRC[2];
-                int dirY, i = 0, bordiY;
+                PanelRC[] percorsiMove = new PanelRC[2];
+                PanelRC[] percorsiEat = new PanelRC[2];
+                int dirY, posMove = 0, posEat = 0, bordiY;
                 ColoriPedine coloreMangiabile;
                 bool possoMangiare = false;
                 if ((color == ColoriPedine.red && scacchiera.turno == Turni.black) || (color == ColoriPedine.black && scacchiera.turno == Turni.red)) return null;
@@ -174,9 +180,9 @@ namespace DamaPaci2
 
                     if (pannelli[corrente.posX + 2, corrente.posY + (2 * dirY)].pedina == null && pannelli[corrente.posX + 1, corrente.posY + (1 * dirY)].pedina != null && pannelli[corrente.posX + 1, corrente.posY + (1 * dirY)].pedina.color == coloreMangiabile && pannelli[corrente.posX + 1, corrente.posY + (1* dirY)].pedina.isDamone == false)
                     {
-                        percorsi[i] = pannelli[corrente.posX + 2, corrente.posY + (2 * dirY)];
-                        percorsi[i].mangio = true;
-                        i++;
+                        percorsiEat[posEat] = pannelli[corrente.posX + 2, corrente.posY + (2 * dirY)];
+                        percorsiEat[posEat].mangio = true;
+                        posEat++;
                         possoMangiare = true;
                     }
                 }
@@ -184,9 +190,9 @@ namespace DamaPaci2
                 {
                     if (pannelli[corrente.posX - 2, corrente.posY + (2 * dirY)].pedina == null && pannelli[corrente.posX - 1, corrente.posY + (1 * dirY)].pedina !=null && pannelli[corrente.posX - 1, corrente.posY + (1 * dirY)].pedina.color == coloreMangiabile && pannelli[corrente.posX - 1, corrente.posY + (1 * dirY)].pedina.isDamone == false)  
                     {
-                        percorsi[i] = pannelli[corrente.posX - 2, corrente.posY + (2 * dirY)];
-                        percorsi[i].mangio = true;
-                        i++;
+                        percorsiEat[posEat] = pannelli[corrente.posX - 2, corrente.posY + (2 * dirY)];
+                        percorsiEat[posEat].mangio = true;
+                        posMove++;
                         possoMangiare = true;
                     }
                 }
@@ -195,8 +201,8 @@ namespace DamaPaci2
                 {
                     if (!possoMangiare && pannelli[corrente.posX + 1, corrente.posY + (1 * dirY)].pedina == null)           
                     {
-                        percorsi[i] = pannelli[corrente.posX + 1, corrente.posY + (1 * dirY)];
-                        i++;
+                        percorsiMove[posMove] = pannelli[corrente.posX + 1, corrente.posY + (1 * dirY)];
+                        posMove++;
                     }
                 }
                 if (corrente.posX - 1 >= 0 && corrente.posY + (1 * dirY) != bordiY)   //movibile sinistra
@@ -204,11 +210,12 @@ namespace DamaPaci2
                         if (pannelli[corrente.posX - 1, corrente.posY + (1 * dirY)].pedina == null)
                             if (!possoMangiare)
                             {
-                                 percorsi[i] = pannelli[corrente.posX - 1, corrente.posY + (1 * dirY)];
-                                    i++;
+                                 percorsiMove[posMove] = pannelli[corrente.posX - 1, corrente.posY + (1 * dirY)];
+                                 posMove++;
                             }
-                
-                return percorsi;
+                //var arrays = new Tuple<PanelRC[], PanelRC[]>(percorsiEat, percorsiMove);
+                //return (arrays);
+                return percorsiMove;
             }
         }
 
@@ -217,8 +224,8 @@ namespace DamaPaci2
             public Damone(ColoriPedine colore, PanelRC cell) : base(colore, cell)  //costruttore classe Damone
             {
                 isDamone = true;
-                if (colore == ColoriPedine.red) Image = Image.FromFile(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal) + @"..\..\Desktop\Dama\Resources\red60p_king.png");
-                else Image = Image.FromFile(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal) + @"..\..\Desktop\Dama\Resources\black60p_king.png");
+                if (colore == ColoriPedine.red) Image = Properties.Resources.red60p_king;
+                else Image = Properties.Resources.black60p_king;
                 SizeMode = PictureBoxSizeMode.StretchImage;
                 cell.Controls.Add(this);
                 cell.pedina = this;
@@ -233,25 +240,16 @@ namespace DamaPaci2
                 PanelRC[,] pannelli = scacchiera.pannello;
                 PanelRC[] percorsi = new PanelRC[4];
                 int dirY;
-                int bordiY;
                 int i = 0;
                 ColoriPedine coloreMangiabile;
                 bool possoMangiare = false;
                 if ((color == ColoriPedine.red && scacchiera.turno == Turni.black) || (color == ColoriPedine.black && scacchiera.turno == Turni.red)) return null;
-                if (color == ColoriPedine.red)
-                {
-                    bordiY = 7;
-                    coloreMangiabile = ColoriPedine.black;
-                }
-                else
-                {
-                    bordiY = 0;
-                    coloreMangiabile = ColoriPedine.red;
-                }
+                if (color == ColoriPedine.red) coloreMangiabile = ColoriPedine.black;
+                else coloreMangiabile = ColoriPedine.red;
                 dirY = 1;
                 for (int j = 0; j < 2; j++)
                 {
-                    if (corrente.posX + 2 <= 7 && corrente.posY + (2 * dirY) >=0 && corrente.posY + (2 * dirY) <= 7  )  //mangiabile destra
+                    if (corrente.posX + 2 <= 7 && corrente.posY + (2 * dirY) >= 0 && corrente.posY + (2 * dirY) <= 7)  //mangiabile destra
                     {
 
                         if (pannelli[corrente.posX + 2, corrente.posY + (2 * dirY)].pedina == null && pannelli[corrente.posX + 1, corrente.posY + (1 * dirY)].pedina != null && pannelli[corrente.posX + 1, corrente.posY + (1 * dirY)].pedina.color == coloreMangiabile)
@@ -296,6 +294,17 @@ namespace DamaPaci2
         private void Stato_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void Suggerimenti_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Istruzioni_Click(object sender, EventArgs e)
+        {
+            var f = new Istruzioni();
+            f.ShowDialog();
         }
     }
 }

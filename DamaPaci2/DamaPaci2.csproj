@@ -51,6 +51,12 @@
     <Compile Include="Grafica.Designer.cs">
       <DependentUpon>Grafica.cs</DependentUpon>
     </Compile>
+    <Compile Include="Istruzioni.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Istruzioni.Designer.cs">
+      <DependentUpon>Istruzioni.cs</DependentUpon>
+    </Compile>
     <Compile Include="Logica.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -74,6 +80,9 @@
     <EmbeddedResource Include="Grafica.resx">
       <DependentUpon>Grafica.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Istruzioni.resx">
+      <DependentUpon>Istruzioni.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Menu.resx">
       <DependentUpon>Menu.cs</DependentUpon>
     </EmbeddedResource>
@@ -85,6 +94,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -98,6 +108,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\black60p.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\black60p_king.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\red60p.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\red60p_king.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -51,7 +51,7 @@
             this.Play.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.Play.ForeColor = System.Drawing.Color.Black;
             this.Play.Location = new System.Drawing.Point(146, 349);
-            this.Play.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Play.Margin = new System.Windows.Forms.Padding(2);
             this.Play.Name = "Play";
             this.Play.Size = new System.Drawing.Size(87, 93);
             this.Play.TabIndex = 1;
