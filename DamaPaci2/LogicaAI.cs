@@ -26,16 +26,17 @@ namespace DamaPaci2
             if ((pedina.color == ColoriPedine.red && turno == Turni.black) || (pedina.color == ColoriPedine.black && turno == Turni.red)) return;
             PanelRC destinazione = sender as PanelRC;
             PanelRC corrente = pedina.Parent as PanelRC;
-            PanelRC[] percorsi = pedina.GeneraPercorsi(this);
+            PanelRC[] percorsiEat = pedina.percorsiEat;
+            PanelRC[] percorsiMove = pedina.percorsiMove;
             PanelRC temp = corrente;
             int dirY, dirX;
             if (corrente.posY > destinazione.posY) dirY = -1;
             else dirY = 1;
             if (corrente.posX > destinazione.posX) dirX = -1;
             else dirX = 1;
-            for (int i = 0; i < percorsi.Length; i++)
+            for (int i = 0; i < percorsiMove.Length; i++)
             {
-                if (percorsi[i] == destinazione)
+                if (percorsiMove[i] == destinazione)
                 {
                     CancellaPercorsi(pedina);
                     do

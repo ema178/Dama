@@ -85,47 +85,48 @@ namespace DamaPaci2
                             temp = new Pedina(ColoriPedine.black, pannello[r, c]);
                             temp.Click += new EventHandler(PercorsiDisponibili);
                         }
-                        /*if(c == 3 && r == 5)
-                        {
-                            temp = new Damone(ColoriPedine.red, pannello[r, c]);
-                            temp.Click += new EventHandler(PercorsiDisponibili);
-                        }
-                        if (c == 0 && r == 0)
-                        {
-                            temp = new Damone(ColoriPedine.black, pannello[r, c]);
-                            temp.Click += new EventHandler(PercorsiDisponibili);
-                            ciao
-                        }*/
-
                     }
                 }
         }
 
         protected void PercorsiDisponibili(object sender, EventArgs e) //stampa i percorsi disponibili
         {
-            PanelRC[] percorsi = ((sender as Control).Parent as PanelRC).pedina.GeneraPercorsi(this);
+            ((sender as Control).Parent as PanelRC).pedina.GeneraPercorsi(this);
             CancellaPercorsi(pedina);
             pedina = sender as Pedina;
             if ((pedina.color == ColoriPedine.red && turno == Turni.black) || (pedina.color == ColoriPedine.black && turno == Turni.red)) return;
-            for (int i = 0; i < percorsi.Length; i++)
-                if (percorsi[i] != null && percorsi[i].pedina == null)
+            for (int i = 0; i < pedina.percorsiEat.Length; i++)
+                if (pedina.percorsiEat[i] != null && pedina.percorsiEat[i].pedina == null)
                 {
-                    if (percorsi[i].mangio == true) percorsi[i].BackColor = Color.Green;
-                    else percorsi[i].BackColor = Color.Yellow;
+                    pedina.percorsiEat[i].BackColor = Color.Green;
                 }
+            for (int i = 0; i < pedina.percorsiMove.Length; i++)
+                if (pedina.percorsiMove[i] != null && pedina.percorsiMove[i].pedina == null)
+                {
+                    pedina.percorsiMove[i].BackColor = Color.Yellow;
+                }
+           
         }
 
         protected void CancellaPercorsi(Pedina curr) //cancella le celle gialle
         {
             if (curr == null) return;
-            PanelRC[] percorsi = curr.GeneraPercorsi(this);
+            curr.GeneraPercorsi(this);
             if ((pedina.color == ColoriPedine.red && turno == Turni.black) || (pedina.color == ColoriPedine.black && turno == Turni.red)) return;
-            for (int i = 0; i < percorsi.Length; i++)
-                if (percorsi[i] != null)
+            for (int i = 0; i < pedina.percorsiEat.Length; i++)
+                if (pedina.percorsiEat[i] != null && pedina.percorsiEat[i].pedina == null)
                 {
-                    percorsi[i].BackColor = Color.DimGray;
-                    percorsi[i].mangio = false;
+                    pedina.percorsiEat[i].BackColor = Color.DimGray;
+                    pedina.percorsiEat[i].mangio = false;
                 }
+            for (int i = 0; i < pedina.percorsiMove.Length; i++)
+                if (pedina.percorsiMove[i] != null && pedina.percorsiMove[i].pedina == null)
+                {
+                    pedina.percorsiMove[i].BackColor = Color.DimGray;
+                    pedina.percorsiMove[i].mangio = false;
+                }
+            Array.Clear(pedina.percorsiMove, 0, 2);
+            Array.Clear(pedina.percorsiEat, 0, 2);
         }
 
         public class PanelRC : Panel  //classe PanelRC
@@ -140,6 +141,8 @@ namespace DamaPaci2
         {
             public ColoriPedine color;
             public bool isDamone = false;
+            public PanelRC[] percorsiMove = new PanelRC[2];
+            public PanelRC[] percorsiEat = new PanelRC[2];
             public Pedina(ColoriPedine colore, PanelRC cell) //costruttore classe Pedina
             {
                 color = colore;
@@ -153,16 +156,14 @@ namespace DamaPaci2
                 Anchor = (AnchorStyles)15;
             }
 
-            virtual public PanelRC[] GeneraPercorsi(Grafica scacchiera) //genera percorsi disponibili in base alla pedina selezionata
+            virtual public void GeneraPercorsi(Grafica scacchiera) //genera percorsi disponibili in base alla pedina selezionata
             {
                 PanelRC corrente = Parent as PanelRC;
                 PanelRC[,] pannelli = scacchiera.pannello;
-                PanelRC[] percorsiMove = new PanelRC[2];
-                PanelRC[] percorsiEat = new PanelRC[2];
                 int dirY, posMove = 0, posEat = 0, bordiY;
                 ColoriPedine coloreMangiabile;
                 bool possoMangiare = false;
-                if ((color == ColoriPedine.red && scacchiera.turno == Turni.black) || (color == ColoriPedine.black && scacchiera.turno == Turni.red)) return null;
+                if ((color == ColoriPedine.red && scacchiera.turno == Turni.black) || (color == ColoriPedine.black && scacchiera.turno == Turni.red)) return;
                 if (color == ColoriPedine.red)
                 {
                     dirY = 1;
@@ -213,9 +214,6 @@ namespace DamaPaci2
                                  percorsiMove[posMove] = pannelli[corrente.posX - 1, corrente.posY + (1 * dirY)];
                                  posMove++;
                             }
-                //var arrays = new Tuple<PanelRC[], PanelRC[]>(percorsiEat, percorsiMove);
-                //return (arrays);
-                return percorsiMove;
             }
         }
 
@@ -234,60 +232,60 @@ namespace DamaPaci2
                 Anchor = (AnchorStyles)15;
             }
 
-            override public PanelRC[] GeneraPercorsi(Grafica scacchiera) //genera percorsi disponibili in base alla pedina selezionata
+            override public void GeneraPercorsi(Grafica scacchiera) //genera percorsi disponibili in base alla pedina selezionata
             {
                 PanelRC corrente = Parent as PanelRC;
                 PanelRC[,] pannelli = scacchiera.pannello;
-                PanelRC[] percorsi = new PanelRC[4];
                 int dirY;
-                int i = 0;
+                int posEat = 0, posMove = 0;
                 ColoriPedine coloreMangiabile;
                 bool possoMangiare = false;
-                if ((color == ColoriPedine.red && scacchiera.turno == Turni.black) || (color == ColoriPedine.black && scacchiera.turno == Turni.red)) return null;
+                if ((color == ColoriPedine.red && scacchiera.turno == Turni.black) || (color == ColoriPedine.black && scacchiera.turno == Turni.red)) return;
                 if (color == ColoriPedine.red) coloreMangiabile = ColoriPedine.black;
                 else coloreMangiabile = ColoriPedine.red;
                 dirY = 1;
                 for (int j = 0; j < 2; j++)
                 {
-                    if (corrente.posX + 2 <= 7 && corrente.posY + (2 * dirY) >= 0 && corrente.posY + (2 * dirY) <= 7)  //mangiabile destra
+                    if (corrente.posX + 2 <= 7 && corrente.posY + (2 * dirY) >= 0 && corrente.posY + (2 * dirY) <= scacchiera.righe - 1)  //mangiabile destra
                     {
 
                         if (pannelli[corrente.posX + 2, corrente.posY + (2 * dirY)].pedina == null && pannelli[corrente.posX + 1, corrente.posY + (1 * dirY)].pedina != null && pannelli[corrente.posX + 1, corrente.posY + (1 * dirY)].pedina.color == coloreMangiabile)
                         {
-                            percorsi[i] = pannelli[corrente.posX + 2, corrente.posY + (2 * dirY)];
-                            i++;
+                            percorsiEat[posEat] = pannelli[corrente.posX + 2, corrente.posY + (2 * dirY)];
+                            percorsiEat[posEat].mangio = true;
+                            posEat++;
                             possoMangiare = true;
                         }
                     }
-                    if (corrente.posX - 2 >= 0 && corrente.posY + (2 * dirY) >=0 && corrente.posY + (2 * dirY) <= 7)  //mangiabile sinistra
+                    if (corrente.posX - 2 >= 0 && corrente.posY + (2 * dirY) >=0 && corrente.posY + (2 * dirY) <= scacchiera.righe - 1)  //mangiabile sinistra
                     {
                         if (pannelli[corrente.posX - 2, corrente.posY + (2 * dirY)].pedina == null && pannelli[corrente.posX - 1, corrente.posY + (1 * dirY)].pedina != null && pannelli[corrente.posX - 1, corrente.posY + (1 * dirY)].pedina.color == coloreMangiabile)  // eatable left
                         {
-                            percorsi[i] = pannelli[corrente.posX - 2, corrente.posY + (2 * dirY)];
-                            i++;
+                            percorsiEat[posEat] = pannelli[corrente.posX - 2, corrente.posY + (2 * dirY)];
+                            percorsiEat[posEat].mangio = true;
+                            posEat++;
                             possoMangiare = true;
                         }
                     }
 
-                    if (corrente.posX + 1 <= 7 && corrente.posY + (1 * dirY) >=0 && corrente.posY + (1 * dirY) <= 7) //movibile destra
+                    if (corrente.posX + 1 <= 7 && corrente.posY + (1 * dirY) >=0 && corrente.posY + (1 * dirY) <= scacchiera.righe - 1) //movibile destra
                     {
                         if (!possoMangiare && pannelli[corrente.posX + 1, corrente.posY + (1 * dirY)].pedina == null)
                         {
-                            percorsi[i] = pannelli[corrente.posX + 1, corrente.posY + (1 * dirY)];
-                            i++;
+                            percorsiMove[posMove] = pannelli[corrente.posX + 1, corrente.posY + (1 * dirY)];
+                            posMove++;
                         }
                     }
-                    if (corrente.posX - 1 >= 0 && corrente.posY + (1 * dirY) >= 0 && corrente.posY + (1 * dirY) <= 7)   //movibile sinistra
+                    if (corrente.posX - 1 >= 0 && corrente.posY + (1 * dirY) >= 0 && corrente.posY + (1 * dirY) <= scacchiera.righe - 1)   //movibile sinistra
                         if (corrente.posX - 1 >= 0 && corrente.posY + (1 * dirY) >= 0)
                             if (pannelli[corrente.posX - 1, corrente.posY + (1 * dirY)].pedina == null)
                                 if (!possoMangiare)
                                 {
-                                    percorsi[i] = pannelli[corrente.posX - 1, corrente.posY + (1 * dirY)];
-                                    i++;
+                                    percorsiMove[posMove] = pannelli[corrente.posX - 1, corrente.posY + (1 * dirY)];
+                                    posMove++;
                                 }
                     dirY = -1;
                 }
-                return percorsi;
             }
         }
 
